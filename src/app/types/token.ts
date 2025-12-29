@@ -4,6 +4,7 @@ export type TokenStage = (typeof TOKEN_STAGES)[number];
 export interface Token {
   id: string;
   name: string;
+  lname: string;
   symbol: string;
   price: number;
   volume: number;
@@ -11,4 +12,16 @@ export interface Token {
   marketCap: number;
   stage: TokenStage;
   change24h: number;
+  image: string;
+  holder: number;
+  website: string;
+  tropy: number;
+  crown: number;
+  userinfo: number;
+  pen: number;
+  sniper: number;
+  insiders: number;
+  bundle: number;
+  cap: number;
+  seconds: number;
 }

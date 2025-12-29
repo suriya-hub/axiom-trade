@@ -2,26 +2,18 @@
 
 import { TokenRow } from "./TokenRow";
 import { Token } from "../../types/token";
+import { memo } from "react";
 
-interface Props {
+interface TokenTableProps {
   tokens: Token[];
 }
-
-export const TokenTable = ({ tokens }: Props) => {
+export const TokenTable = memo(({ tokens }: TokenTableProps) => {
   return (
-    <table className="w-full">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Price</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        {tokens.map(token => (
-          <TokenRow key={token.id} token={token} />
-        ))}
-      </tbody>
-    </table>
+    <div className="overflow-hidden rounded-lg border border-gray-800 w-full bg-[#101114]">
+      {tokens.map(token => (
+        <TokenRow key={token.id} token={token} />
+      ))}
+    </div>
   );
-};
+});
+

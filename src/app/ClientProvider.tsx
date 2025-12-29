@@ -4,7 +4,26 @@
 import { Provider } from "react-redux";
 import { store } from "./store";
 import { ReactNode } from "react";
+import { ToastContainer, toast, ToastOptions } from "react-toastify";
 
 export default function ClientProvider({ children }: { children: ReactNode }) {
-  return <Provider store={store}>{children}</Provider>;
+
+
+  return (
+    <Provider store={store}>
+      {children}
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+    </Provider>
+  );
 }
+

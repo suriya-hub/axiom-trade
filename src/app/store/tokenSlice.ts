@@ -1,77 +1,157 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Token, TOKEN_STAGES, TokenStage } from "../types/token";
 
+/* --------------------------
+ Types
+---------------------------*/
 interface TokenState {
-  entities: Record<string, Token>;
+  tokensA: Record<string, Token>;
+  tokensB: Record<string, Token>;
+  tokensC: Record<string, Token>;
 }
 
-// ✅ MUST be defined first
+/* --------------------------
+ Helpers
+---------------------------*/
+const getRandomImage = () =>
+  `https://picsum.photos/50/50?random=${Math.floor(Math.random() * 1000)}`;
+
 const getRandomStage = (): TokenStage =>
   TOKEN_STAGES[Math.floor(Math.random() * TOKEN_STAGES.length)];
 
-export const PREDEFINED_TOKEN_NAMES = [
-  "NovaPulse",
-  "LunaFlux",
-  "ApexCoin",
-  "QuantumX",
-  "AtlasPay",
-  "Zenith",
-  "OrbitChain",
-  "EchoToken",
-  "Nimbus",
-  "Solara",
-  "HelixPay",
-  "Vertex",
-  "CosmoX",
-  "Aurora",
-  "PulseNet",
-  "MetaCoin",
-  "Cryptex",
-  "Valora",
-  "Nexo",
-  "BlockZen",
+const PREDEFINED_TOKEN_NAMES = [
+  "NovaPulse", "LunaFlux", "ApexCoin", "QuantumX", "AtlasPay",
+  "Zenith", "OrbitChain", "EchoToken", "Nimbus", "Solara",
+  "HelixPay", "Vertex", "CosmoX", "Aurora", "PulseNet",
+  "MetaCoin", "Cryptex", "Valora", "Nexo", "BlockZen",
 ] as const;
 
+const getRandomTokenName = () =>
+  PREDEFINED_TOKEN_NAMES[Math.floor(Math.random() * PREDEFINED_TOKEN_NAMES.length)];
 
-export const getRandomTokenName = () =>
-  PREDEFINED_TOKEN_NAMES[
-    Math.floor(Math.random() * PREDEFINED_TOKEN_NAMES.length)
-  ];
-
-
-
-const initialTokens: Token[] = Array.from({ length: 5 }, () => ({
+/* --------------------------
+ Create mock token
+---------------------------*/
+const createMockToken = (): Token => ({
   id: crypto.randomUUID(),
   name: getRandomTokenName(),
+  lname: `${getRandomTokenName()} Protocol`,
   symbol: `TKN${Math.floor(Math.random() * 100)}`,
   price: Math.random() * 1000,
   volume: Math.random() * 10000,
   liquidity: Math.random() * 10000,
-  marketCap: Math.random() * 1000000,
+  marketCap: Math.random() * 1_000_000,
+  cap: Math.random() * 1_000_000,
   stage: getRandomStage(),
   change24h: Math.random() * 20 - 10,
-}));
+  image: getRandomImage(),
+  holder: Math.floor(Math.random() * 50_000),
+  website: `https://${getRandomTokenName().toLowerCase()}.com`,
+  tropy: Math.floor(Math.random() * 5),
+  crown: Math.floor(Math.random() * 3),
+  userinfo: Math.floor(Math.random() * 100),
+  pen: Math.floor(Math.random() * 10),
+  sniper: Math.floor(Math.random() * 10),
+  insiders: Math.floor(Math.random() * 20),
+  bundle: Math.floor(Math.random() * 5),
+  seconds: Math.floor(Math.random() * 5),
+});
 
-const initialState: TokenState = {
-  entities: initialTokens.reduce((acc, token) => {
-    acc[token.id] = token;
-    return acc;
-  }, {} as Record<string, Token>),
+/* --------------------------
+ Create token set
+---------------------------*/
+const createRandomTokens = (count: number) =>
+  Array.from({ length: count }, createMockToken).reduce(
+    (acc, token) => {
+      acc[token.id] = token;
+      return acc;
+    },
+    {} as Record<string, Token>
+  );
+
+/* --------------------------
+ Numeric keys
+---------------------------*/
+type NumericTokenKey = {
+  [K in keyof Token]: Token[K] extends number ? K : never
+}[keyof Token];
+
+const COUNTER_KEYS: NumericTokenKey[] = [
+  "holder",
+  "tropy",
+  "crown",
+  "userinfo",
+  "pen",
+  "sniper",
+  "insiders",
+  "bundle",
+];
+
+const LIMITS: Partial<Record<NumericTokenKey, number>> = {
+  tropy: 5,
+  crown: 3,
+  bundle: 5,
+  seconds: 1,
 };
 
+/* --------------------------
+ Randomize stats (WebSocket-like)
+---------------------------*/
+const randomizeTokenStats = (token: Token) => {
+  // Price-like values
+  token.price = Math.max(0, token.price + (Math.random() - 0.5) * 20);
+  token.volume = Math.max(0, token.volume + Math.random() * 500);
+  token.liquidity = Math.max(0, token.liquidity + Math.random() * 300);
+  token.marketCap = Math.max(0, token.marketCap + Math.random() * 1500);
+  token.cap = Math.max(0, token.cap + Math.random() * 1000);
+  token.seconds = Math.max(0, token.seconds + 1);
+
+  token.change24h = Math.max(
+    -20,
+    Math.min(20, token.change24h + (Math.random() - 0.5) * 2)
+  );
+
+  // Counter fields
+  COUNTER_KEYS.forEach(key => {
+    const delta = Math.floor(Math.random() * 3) - 1; // -1 | 0 | +1
+    const next = Math.max(0, token[key] + delta);
+    token[key] = LIMITS[key] ? Math.min(next, LIMITS[key]!) : next;
+  });
+};
+
+/* --------------------------
+ Initial State
+---------------------------*/
+const initialState: TokenState = {
+  tokensA: createRandomTokens(1),
+  tokensB: createRandomTokens(1),
+  tokensC: createRandomTokens(1),
+};
+
+/* --------------------------
+ Slice
+---------------------------*/
 export const tokenSlice = createSlice({
   name: "tokens",
   initialState,
   reducers: {
-    updatePrice: (state, action: PayloadAction<{ id: string; price: number }>) => {
-      const t = state.entities[action.payload.id];
-      if (t) t.price = action.payload.price;
-    },
-    setTokens: (state, action: PayloadAction<Token[]>) => {
-      action.payload.forEach(token => (state.entities[token.id] = token));
+    // Update one random token in a set
+    updateRandomToken: (
+      state,
+      action: PayloadAction<{ set: "A" | "B" | "C" }>
+    ) => {
+      const setKey = `tokens${action.payload.set}` as keyof TokenState;
+      const tokens = Object.values(state[setKey]);
+      if (!tokens.length) return;
+
+      const token = tokens[Math.floor(Math.random() * tokens.length)];
+      randomizeTokenStats(token);
     },
   },
 });
 
-export const { updatePrice, setTokens } = tokenSlice.actions;
+/* --------------------------
+ Exports
+---------------------------*/
+export const { updateRandomToken } = tokenSlice.actions;
 export default tokenSlice.reducer;

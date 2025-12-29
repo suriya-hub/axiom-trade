@@ -3,22 +3,134 @@
 import { Token } from "../../types/token";
 import { TokenPriceCell } from "../molecules/TokenPriceCell";
 import { Badge } from "../atom/Badge";
+import { FaEdit, FaSearch, FaUser, FaGlobe, FaUsers, FaTrophy, FaCrown, FaBullseye, FaRainbow, FaRegUser, FaCodepen, FaBolt, FaCopy, FaStar } from "react-icons/fa";
+import { formatK } from "@/app/utils/format";
+import { Toast } from "@/app/utils/toast";
+import { Tooltip } from "../atom/Tooltip";
 
-export const TokenRow = ({ token }: { token: Token }) => (
-  <tr className="hover:bg-gray-100 transition">
-    <td>{token.name}</td>
-    <TokenPriceCell price={token.price} />
-    <td>
-      <Badge
-        label={token.stage}
-        color={
-          token.stage === "new"
-            ? "green"
-            : token.stage === "final"
-            ? "blue"
-            : "gray"
-        }
-      />
-    </td>
-  </tr>
-);
+export const TokenRow = ({ token }: { token: Token }) => {
+
+  return (
+    <>
+      <div className="hover:bg-gray-900 text-white transition border border-gray-800 flex items-center justify-between text-white p-3 rounded-lg w-full gap-4 text-sm">
+        {/* Left: Image */}
+        <div className="flex items-center gap-3">
+          <div className="relative w-12 h-12 bg-gray-700 flex items-center justify-center rounded cursor-pointer group">
+            <Tooltip
+              content={
+                <div className="w-[260px] h-[260px] rounded-lg overflow-hidden bg-black">
+                  <img
+                    src={token.image}
+                    alt={token.name}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              }
+            >
+              <img
+                src={token.image}
+                alt={token.name}
+                className="w-12 h-12 rounded cursor-pointer object-cover"
+              />
+            </Tooltip>
+            <Tooltip content="Featured Token">
+              <FaStar className="w-4 h-4 border border-blue-800 absolute -bottom-1 -right-1 text-yellow-400 bg-gray-900 rounded-full p-1 text-sm cursor-pointer" />
+            </Tooltip>
+          </div>
+        </div>
+
+
+        {/* Middle */}
+        <div className="flex flex-col gap-1 min-w-0 flex-1">
+          {/* Name */}
+
+          <div className="flex gap-2 items-center min-w-0 cursor-pointer">
+            <span className="font-bold text-white truncate">
+              {token.lname}
+            </span>
+            <Tooltip content={token.lname}>
+              <span className="text-gray-400 truncate hover:text-blue-400">
+                {token.lname}
+              </span>
+            </Tooltip>
+            <FaCopy className="text-gray-400 hover:text-white cursor-pointer" />
+          </div>
+
+          {/* Meta row */}
+          <div className="flex items-center gap-2 text-gray-400 text-xs">
+            <div className="flex flex-row gap-1 cursor-pointer">
+              <span className="text-green-400 font-mono font-bold">{token.seconds}s</span>
+            </div>
+            <div className="flex flex-row gap-1 cursor-pointer">
+              <FaUser />
+            </div>
+            <Tooltip content={token.website}>
+              <div className="flex flex-row gap-1 cursor-pointer"><FaGlobe /></div>
+            </Tooltip>
+            <div className="flex flex-row gap-1 cursor-pointer"><FaSearch /></div>
+            <Tooltip content={'Holders'}>
+              <div className="flex flex-row gap-1 cursor-pointer"><FaUsers /><span>{token.holder}</span></div>
+            </Tooltip>
+            <Tooltip content={'KOLs'}>
+              <div className="flex flex-row gap-1 cursor-pointer">
+                <FaTrophy />
+                <span>{token.tropy}</span>
+              </div>
+            </Tooltip>
+            <Tooltip content={'Dev Migration/Created'}>
+              <div className="flex flex-row gap-1 cursor-pointer">
+                <FaCrown />
+                <span>{token.crown}/20</span>
+              </div>
+            </Tooltip>
+          </div>
+          {/* Stat badges */}
+          <div className="flex gap-2 items-center text-xs">
+            <div className="flex flex-row gap-1 cursor-pointer">
+              <FaRegUser className="text-red-400" />
+              <span className="text-red-400">20%</span>
+            </div>
+            <Tooltip content={'Dev Migration/Created'}>
+              <div className="flex flex-row gap-1 cursor-pointer">
+                <FaCodepen className="text-green-400" />
+                <span className="text-green-400">{token.pen}%</span>
+              </div>
+            </Tooltip>
+            <Tooltip content={'Snipers Holding'}>
+              <div className="flex flex-row gap-1 cursor-pointer">
+                <FaBullseye className="text-red-400" />
+                <span className="text-red-400">{token.sniper}%</span>
+              </div>
+            </Tooltip>
+            <Tooltip content={'Insider Holding'}>
+              <div className="flex flex-row gap-1 cursor-pointer">
+                <FaRainbow className="text-green-400" />
+                <span className="text-green-400">{token.bundle}%</span>
+              </div>
+            </Tooltip>
+          </div>
+        </div>
+
+        {/* Right */}
+        <div className="flex flex-col items-end gap-1">
+          <Tooltip content={'Market Cap'}>
+            <div className="font-bold cursor-pointer">
+              <span className="text-gray-400 text-xs px-1">MC</span>
+              ${formatK(token.cap)}
+            </div>
+          </Tooltip>
+          <Tooltip content={'Volume'}>
+            <div className="flex flex-row text-gray-400 gap-2 cursor-pointer">
+              V <TokenPriceCell price={token.price} />
+            </div>
+          </Tooltip>
+          <div className="flex items-center gap-1 bg-blue-600 text-white px-3 py-1 rounded-full font-bold text-xs cursor-pointer">
+            <FaBolt />
+            0 SOL
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
