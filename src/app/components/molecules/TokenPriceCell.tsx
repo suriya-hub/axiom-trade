@@ -7,16 +7,14 @@ export const TokenPriceCell = ({ price }: { price: number }) => {
   const flash = usePriceFlash(price);
 
   return (
-    <td>
-      <div className={`flex items-center space-x-2 ${flash === "up"
-          ? "text-green-500"
-          : flash === "down"
-            ? "text-red-500"
-            : "text-white"
-        }`}
-      >
-        <Price value={price} />
-      </div>
-    </td>
+    <div className={`flex items-center space-x-2 ${flash === "up"
+      ? "text-green-500"
+      : flash === "down"
+        ? "text-red-500"
+        : "text-white"
+      }`}
+    >
+      <Price value={price} />
+    </div>
   );
 };

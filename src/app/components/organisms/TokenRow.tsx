@@ -3,10 +3,11 @@
 import { Token } from "../../types/token";
 import { TokenPriceCell } from "../molecules/TokenPriceCell";
 import { Badge } from "../atom/Badge";
-import { FaEdit, FaSearch, FaUser, FaGlobe, FaUsers, FaTrophy, FaCrown, FaBullseye, FaRainbow, FaRegUser, FaCodepen, FaBolt, FaCopy, FaStar } from "react-icons/fa";
+import { FaEdit, FaSearch, FaUser, FaGlobe, FaUsers, FaTrophy, FaCrown, FaBullseye, FaRainbow, FaRegUser, FaCodepen, FaBolt, FaCopy, FaStar, FaCheckCircle, FaCalendarAlt, FaRegClipboard } from "react-icons/fa";
 import { formatK } from "@/app/utils/format";
-import { Toast } from "@/app/utils/toast";
 import { Tooltip } from "../atom/Tooltip";
+import UserCard from "../atom/UserCard";
+import { copyToClipboard } from "@/app/utils/tokenUtils";
 
 export const TokenRow = ({ token }: { token: Token }) => {
 
@@ -47,14 +48,23 @@ export const TokenRow = ({ token }: { token: Token }) => {
 
           <div className="flex gap-2 items-center min-w-0 cursor-pointer">
             <span className="font-bold text-white truncate">
-              {token.lname}
+              {token.name}
             </span>
             <Tooltip content={token.lname}>
               <span className="text-gray-400 truncate hover:text-blue-400">
                 {token.lname}
               </span>
             </Tooltip>
-            <FaCopy className="text-gray-400 hover:text-white cursor-pointer" />
+            <div
+              onClick={() =>
+                copyToClipboard(token.lname, {
+                  message: "Token address copied",
+                  icon: <FaRegClipboard className="text-blue-500 text-sm" />,
+                })
+              }
+            >
+              <FaCopy className="text-gray-400 hover:text-white cursor-pointer" />
+            </div>
           </div>
 
           {/* Meta row */}
@@ -63,7 +73,24 @@ export const TokenRow = ({ token }: { token: Token }) => {
               <span className="text-green-400 font-mono font-bold">{token.seconds}s</span>
             </div>
             <div className="flex flex-row gap-1 cursor-pointer">
-              <FaUser />
+
+              <Tooltip content={
+
+                <UserCard
+                  token={token}
+                  username="OraxLabs"
+                  displayName="OraxLabs"
+                  joinedDate="Dec 2025"
+                  following={3}
+                  followers={15}
+                  onClose={() => alert("Close button clicked")}
+                />
+
+              }>
+                <span className="text-gray-400 truncate hover:text-blue-400">
+                  <FaUser />
+                </span>
+              </Tooltip>
             </div>
             <Tooltip content={token.website}>
               <div className="flex flex-row gap-1 cursor-pointer"><FaGlobe /></div>
@@ -125,7 +152,12 @@ export const TokenRow = ({ token }: { token: Token }) => {
               V <TokenPriceCell price={token.price} />
             </div>
           </Tooltip>
-          <div className="flex items-center gap-1 bg-blue-600 text-white px-3 py-1 rounded-full font-bold text-xs cursor-pointer">
+          <div className="flex items-center gap-1 bg-blue-600 text-white px-3 py-1 rounded-full font-bold text-xs cursor-pointer" onClick={() =>
+            copyToClipboard(token.lname, {
+              message: "Minimum buy amount is 0.0001 SOL",
+              icon: <FaRegClipboard className="text-blue-500 text-sm" />,
+            })
+          }>
             <FaBolt />
             0 SOL
           </div>

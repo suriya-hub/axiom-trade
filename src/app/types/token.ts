@@ -13,6 +13,7 @@ export interface Token {
   stage: TokenStage;
   change24h: number;
   image: string;
+  bannerimage: string;
   holder: number;
   website: string;
   tropy: number;

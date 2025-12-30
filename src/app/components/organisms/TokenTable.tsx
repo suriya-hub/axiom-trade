@@ -1,5 +1,3 @@
-"use client";
-
 import { TokenRow } from "./TokenRow";
 import { Token } from "../../types/token";
 import { memo } from "react";

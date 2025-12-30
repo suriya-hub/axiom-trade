@@ -45,6 +45,7 @@ const createMockToken = (): Token => ({
   stage: getRandomStage(),
   change24h: Math.random() * 20 - 10,
   image: getRandomImage(),
+  bannerimage: getRandomImage(),
   holder: Math.floor(Math.random() * 50_000),
   website: `https://${getRandomTokenName().toLowerCase()}.com`,
   tropy: Math.floor(Math.random() * 5),
@@ -123,9 +124,9 @@ const randomizeTokenStats = (token: Token) => {
  Initial State
 ---------------------------*/
 const initialState: TokenState = {
-  tokensA: createRandomTokens(1),
-  tokensB: createRandomTokens(1),
-  tokensC: createRandomTokens(1),
+  tokensA: createRandomTokens(2),
+  tokensB: createRandomTokens(2),
+  tokensC: createRandomTokens(2),
 };
 
 /* --------------------------

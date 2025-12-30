@@ -1,17 +1,13 @@
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Generic wrapper for all toast types
-export const Toast = {
-  success: (message: string, autoClose = 3000) =>
-    toast.success(message, { position: "top-right", autoClose }),
+import { toast } from "react-toastify";
 
-  error: (message: string, autoClose = 3000) =>
-    toast.error(message, { position: "top-right", autoClose }),
+export const showSuccess = (message: string) =>
+  toast.success(message);
 
-  info: (message: string, autoClose = 3000) =>
-    toast.info(message, { position: "top-right", autoClose }),
+export const showError = (message: string) =>
+  toast.error(message);
 
-  warn: (message: string, autoClose = 3000) =>
-    toast.warn(message, { position: "top-right", autoClose }),
-};
+export const showInfo = (message: string) =>
+  toast.info(message);

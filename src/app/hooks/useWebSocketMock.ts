@@ -12,7 +12,7 @@ export const useWebSocketMock = () => {
       (["A", "B", "C"] as const).forEach(set => {
         dispatch(updateRandomToken({ set }));
       });
-    }, 500);
+    }, 2000);
     return () => clearInterval(interval);
   }, [dispatch]);
 };

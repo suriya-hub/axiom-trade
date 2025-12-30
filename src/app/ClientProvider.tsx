@@ -14,15 +14,16 @@ export default function ClientProvider({ children }: { children: ReactNode }) {
       {children}
       <ToastContainer
         position="top-center"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
+        autoClose={500}
+        hideProgressBar
         closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
+        pauseOnHover={false}
+        draggable={false}
+        icon={false}
+        toastClassName="custom-toast"
+        closeButton={false}
       />
+
     </Provider>
   );
 }
