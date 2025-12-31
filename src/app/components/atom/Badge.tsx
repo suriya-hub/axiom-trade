@@ -1,7 +1,5 @@
-interface BadgeProps {
-  label: string;
-  color?: "green" | "blue" | "gray";
-}
+import { BadgeProps } from "@/app/types/interface";
+
 
 export const Badge = ({ label, color = "gray" }: BadgeProps) => {
   const colors = {

@@ -1,20 +1,11 @@
 "use client";
 
+import { CommonModalProps } from "@/app/types/interface";
 import { useState } from "react";
 import { FaTimes, FaUserShield, FaShieldAlt, FaShieldVirus, FaInfoCircle } from "react-icons/fa";
 
-interface DropItem {
-    label: string;
-    icon?: React.ReactNode;
-    color?: string; // optional text color
-}
 
-interface CommonModalProps {
-    isOpen: boolean;
-    title: string;
-    dropList?: DropItem[];
-    onClose: () => void;
-}
+
 type MevMode = "off" | "reduced" | "secure";
 
 export const CommonModal = ({
@@ -51,7 +42,7 @@ export const CommonModal = ({
                 {/* Modal Header */}
                 <div className="flex flex-row items-center justify-between">
                     <h3 className="text-lg font-semibold mb-2">{title}</h3>
-                    <FaTimes className="cursor-pointer" onClick={onClose}/>
+                    <FaTimes className="cursor-pointer" onClick={onClose} />
                 </div>
 
                 {/* Tabs */}

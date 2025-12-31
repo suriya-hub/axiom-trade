@@ -4,7 +4,7 @@
 import { Provider } from "react-redux";
 import { store } from "./store";
 import { ReactNode } from "react";
-import { ToastContainer, toast, ToastOptions } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 
 export default function ClientProvider({ children }: { children: ReactNode }) {
 
@@ -23,7 +23,6 @@ export default function ClientProvider({ children }: { children: ReactNode }) {
         toastClassName="custom-toast"
         closeButton={false}
       />
-
     </Provider>
   );
 }

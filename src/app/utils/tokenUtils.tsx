@@ -1,13 +1,9 @@
 import { toast } from "react-toastify";
-import { TOKEN_STAGES, TokenStage } from "../types/token";
+import { CopyToastOptions, TOKEN_STAGES, TokenStage } from "../types/interface";
 import { showError, showSuccess } from "./toast";
 import { FaRegClipboard, FaTimes } from "react-icons/fa";
 import { ReactNode } from "react";
 
-interface CopyToastOptions {
-  message?: string;
-  icon?: ReactNode;
-}
 
 export const TOKEN_NAMES = [
   "NovaPulse",

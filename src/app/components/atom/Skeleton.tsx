@@ -1,8 +1,4 @@
-interface SkeletonProps {
-  width?: string;
-  height?: string;
-  className?: string;
-}
+import { SkeletonProps } from "@/app/types/interface";
 
 export const Skeleton = ({ width = "full", height = "4", className = "" }: SkeletonProps) => {
   return (

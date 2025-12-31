@@ -1,22 +1,10 @@
 // components/UserCard.tsx
 "use client";
 
+import { UserCardProps } from "@/app/types/interface";
 import { FC } from "react";
 import { FaCalendarAlt } from "react-icons/fa";
 
-interface UserCardProps {
-  token: {
-    image: string;
-    name: string;
-    bannerimage: string;
-  };
-  username: string;
-  displayName: string;
-  joinedDate: string;
-  following: number;
-  followers: number;
-  onClose?: () => void;
-}
 
 const UserCard: FC<UserCardProps> = ({
   token,

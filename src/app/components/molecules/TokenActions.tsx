@@ -1,7 +1,4 @@
-interface TokenActionsProps {
-  onBuy: () => void;
-  onWatch: () => void;
-}
+import { TokenActionsProps } from "@/app/types/interface";
 
 export const TokenActions = ({ onBuy, onWatch }: TokenActionsProps) => (
   <div className="flex gap-2">

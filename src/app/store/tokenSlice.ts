@@ -1,14 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Token, TOKEN_STAGES, TokenStage } from "../types/token";
+import { Token, TOKEN_STAGES, TokenStage, TokenState } from "../types/interface";
 
 /* --------------------------
  Types
 ---------------------------*/
-interface TokenState {
-  tokensA: Record<string, Token>;
-  tokensB: Record<string, Token>;
-  tokensC: Record<string, Token>;
-}
 
 /* --------------------------
  Helpers

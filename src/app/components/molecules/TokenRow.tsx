@@ -1,6 +1,6 @@
 "use client";
 
-import { Token } from "../../types/token";
+import { Token } from "../../types/interface";
 import { TokenPriceCell } from "../molecules/TokenPriceCell";
 import { Badge } from "../atom/Badge";
 

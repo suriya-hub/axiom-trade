@@ -1,10 +1,8 @@
 import { TokenRow } from "./TokenRow";
-import { Token } from "../../types/token";
+import { Token, TokenTableProps } from "../../types/interface";
 import { memo } from "react";
 
-interface TokenTableProps {
-  tokens: Token[];
-}
+
 export const TokenTable = memo(({ tokens }: TokenTableProps) => {
   return (
     <div className="overflow-hidden rounded-lg border border-gray-800 w-full bg-[#101114]">

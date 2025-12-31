@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { TokenStage } from "../types/token";
+import { TokenStage } from "../types/interface";
 import { fetchTokens } from "../services/tokenService";
 
 export const useTokens = (stage: TokenStage) =>

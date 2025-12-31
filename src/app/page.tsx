@@ -14,39 +14,14 @@ import {
   FaWindows,
   FaLinux,
 } from "react-icons/fa";
+import { PType, SortKey, SortOrder } from "./types/types";
+import { sortTokens } from "./utils/helper";
 
-/* ---------------- TYPES ---------------- */
-
-type PType = "P1" | "P2" | "P3";
-type SortKey = "price" | "volume" | "time";
-type SortOrder = "asc" | "desc";
-
-/* --------------- HELPERS --------------- */
-
-function sortTokens<T extends Record<string, any>>(
-  tokens: T[],
-  key: SortKey,
-  order: SortOrder
-) {
-  return [...tokens].sort((a, b) => {
-    const aVal = a[key];
-    const bVal = b[key];
-
-    if (aVal === bVal) return 0;
-
-    if (order === "asc") {
-      return aVal > bVal ? 1 : -1;
-    }
-    return aVal < bVal ? 1 : -1;
-  });
-}
 
 /* ---------------- PAGE ---------------- */
 
 export default function Page() {
   useWebSocketMock();
-
-  /* ---------- DROPDOWN DATA ---------- */
 
   const dropList = [
     { label: "20%", icon: <FaApple /> },
@@ -57,15 +32,9 @@ export default function Page() {
 
   /* ---------- REDUX DATA ---------- */
 
-  const tokensA = useSelector((state: RootState) =>
-    Object.values(state.tokens.tokensA)
-  );
-  const tokensB = useSelector((state: RootState) =>
-    Object.values(state.tokens.tokensB)
-  );
-  const tokensC = useSelector((state: RootState) =>
-    Object.values(state.tokens.tokensC)
-  );
+  const tokensA = useSelector((state: RootState) => Object.values(state.tokens.tokensA));
+  const tokensB = useSelector((state: RootState) => Object.values(state.tokens.tokensB));
+  const tokensC = useSelector((state: RootState) => Object.values(state.tokens.tokensC));
 
   const columns = [
     { title: "New Pair", tokens: tokensA },
@@ -122,7 +91,6 @@ export default function Page() {
 
                 <div className="relative">
                   <div className="flex items-center gap-4 rounded-full border border-gray-700 py-0.5 px-4 text-xs text-gray-400">
-                    {/* Bolt */}
                     <div className="flex items-center gap-1 cursor-pointer">
                       <FaBolt />
                       <span>0</span>

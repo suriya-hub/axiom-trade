@@ -1,12 +1,9 @@
 "use client";
 
+import { TooltipProps } from "@/app/types/interface";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import React, { useState } from "react";
 
-interface TooltipProps {
-  content: React.ReactNode;
-  children: React.ReactNode;
-}
 
 export const Tooltip = ({ content, children }: TooltipProps) => {
   const [open, setOpen] = useState(false);
