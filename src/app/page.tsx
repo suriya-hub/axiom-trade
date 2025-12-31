@@ -1,6 +1,6 @@
 "use client";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState, useMemo } from "react";
 import { RootState } from "./store";
 import { useWebSocketMock } from "./hooks/useWebSocketMock";
@@ -16,19 +16,13 @@ import {
 } from "react-icons/fa";
 import { PType, SortKey, SortOrder } from "./types/types";
 import { sortTokens } from "./utils/helper";
+import { setBuyAmount } from "./store/tokenSlice";
 
-
-/* ---------------- PAGE ---------------- */
 
 export default function Page() {
+  const dispatch = useDispatch();
   useWebSocketMock();
 
-  const dropList = [
-    { label: "20%", icon: <FaApple /> },
-    { label: "0.001", icon: <FaAndroid /> },
-    { label: "0.01", icon: <FaWindows /> },
-    { label: "off", icon: <FaLinux /> },
-  ] as const;
 
   /* ---------- REDUX DATA ---------- */
 
@@ -36,31 +30,33 @@ export default function Page() {
   const tokensB = useSelector((state: RootState) => Object.values(state.tokens.tokensB));
   const tokensC = useSelector((state: RootState) => Object.values(state.tokens.tokensC));
 
-  const columns = [
-    { title: "New Pair", tokens: tokensA },
-    { title: "Final Stretch", tokens: tokensB },
-    { title: "Migrated", tokens: tokensC },
-  ] as const;
-
   /* ---------- STATE ---------- */
-
-  const [selectedByColumn, setSelectedByColumn] = useState<
-    Record<string, PType>
-  >({
-    "New Pair": "P1",
-    "Final Stretch": "P1",
-    "Migrated": "P1",
-  });
-
-  const [sortByColumn, setSortByColumn] = useState<
-    Record<string, { key: SortKey; order: SortOrder }>
-  >({
-    "New Pair": { key: "time", order: "desc" },
-    "Final Stretch": { key: "time", order: "desc" },
-    "Migrated": { key: "time", order: "desc" },
-  });
-
+  const dropList = [
+    { label: "20%", icon: <FaApple /> },
+    { label: "0.001", icon: <FaAndroid /> },
+    { label: "0.01", icon: <FaWindows /> },
+    { label: "off", icon: <FaLinux /> },
+  ] as const;
+  const columns = [
+    { title: "New Pair", tokens: tokensA, set: "A", },
+    { title: "Final Stretch", tokens: tokensB, set: "B", },
+    { title: "Migrated", tokens: tokensC, set: "C", },
+  ] as const;
+  const [selectedByColumn, setSelectedByColumn] =
+    useState<Record<string, PType>>({
+      "New Pair": "P1",
+      "Final Stretch": "P1",
+      Migrated: "P1",
+    });
+  const [sortByColumn, setSortByColumn] =
+    useState<Record<string, { key: SortKey; order: SortOrder }>>({
+      "New Pair": { key: "time", order: "desc" },
+      "Final Stretch": { key: "time", order: "desc" },
+      Migrated: { key: "time", order: "desc" },
+    });
   const [modalColumn, setModalColumn] = useState<string | null>(null);
+  const buyAmount = useSelector((state: RootState) => state.tokens.buyAmount);
+
 
   /* ---------------- RENDER ---------------- */
 
@@ -93,7 +89,17 @@ export default function Page() {
                   <div className="flex items-center gap-4 rounded-full border border-gray-700 py-0.5 px-4 text-xs text-gray-400">
                     <div className="flex items-center gap-1 cursor-pointer">
                       <FaBolt />
-                      <span>0</span>
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        value={buyAmount[col.set]}
+                        onChange={(e) => {
+                          const value = Number(e.target.value.replace(/[^0-9]/g, ""));
+                          dispatch(setBuyAmount({ set: col.set, value }));
+                        }}
+                        className="max-w-[30px] w-fullborder-none outline-none ring-0focus:outline-nonefocus:ring-0 focus:border-none bg-transparenttext-center"
+                      />
                     </div>
 
                     {/* ---- P1 P2 P3 (GROUPED) ---- */}
@@ -167,7 +173,7 @@ export default function Page() {
               </div>
 
               {/* -------- TABLE -------- */}
-              <TokenTable tokens={sortedTokens} />
+              <TokenTable tokens={sortedTokens} buyAmount={buyAmount[col.set]} />
             </div>
           );
         })}

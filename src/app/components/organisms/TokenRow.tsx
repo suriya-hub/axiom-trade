@@ -3,13 +3,29 @@
 import { Token } from "../../types/interface";
 import { TokenPriceCell } from "../molecules/TokenPriceCell";
 import { Badge } from "../atom/Badge";
-import { FaEdit, FaSearch, FaUser, FaGlobe, FaUsers, FaTrophy, FaCrown, FaBullseye, FaRainbow, FaRegUser, FaCodepen, FaBolt, FaCopy, FaStar, FaCheckCircle, FaCalendarAlt, FaRegClipboard } from "react-icons/fa";
+import { FaEdit, FaSearch, FaUser, FaGlobe, FaUsers, FaTrophy, FaCrown, FaBullseye, FaRainbow, FaRegUser, FaCodepen, FaBolt, FaCopy, FaStar, FaCheckCircle, FaCalendarAlt, FaRegClipboard, FaExclamationCircle } from "react-icons/fa";
 import { formatK } from "@/app/utils/format";
 import { Tooltip } from "../atom/Tooltip";
 import UserCard from "../atom/UserCard";
 import { copyToClipboard } from "@/app/utils/tokenUtils";
 
-export const TokenRow = ({ token }: { token: Token }) => {
+
+export const TokenRow = ({ token, buyAmount }: { token: Token, buyAmount: number }) => {
+
+
+  const onBuyFeatured = () => {
+    if (buyAmount === 0) {
+      copyToClipboard(token.lname, {
+        message: "Minimum buy amount is 0.0001 SOL",
+        icon: <FaRegClipboard className="text-blue-500 text-sm" />,
+      })
+    } else {
+      copyToClipboard(token.lname, {
+        message: "Transaction failed to send: Insufficient SOL balance for buy amount",
+        icon: <FaExclamationCircle className="text-red-500 text-sm" />,
+      })
+    }
+  }
 
   return (
     <>
@@ -152,14 +168,10 @@ export const TokenRow = ({ token }: { token: Token }) => {
               V <TokenPriceCell price={token.price} />
             </div>
           </Tooltip>
-          <div className="flex items-center gap-1 bg-blue-600 text-white px-3 py-1 rounded-full font-bold text-xs cursor-pointer" onClick={() =>
-            copyToClipboard(token.lname, {
-              message: "Minimum buy amount is 0.0001 SOL",
-              icon: <FaRegClipboard className="text-blue-500 text-sm" />,
-            })
-          }>
+          <div className="flex items-center gap-1 bg-blue-600 text-white px-3 py-1 rounded-full font-bold text-xs cursor-pointer"
+            onClick={() => onBuyFeatured()}>
             <FaBolt />
-            0 SOL
+            {buyAmount} SOL
           </div>
         </div>
       </div>

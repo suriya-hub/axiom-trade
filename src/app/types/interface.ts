@@ -27,6 +27,8 @@ export interface Token {
   bundle: number;
   cap: number;
   seconds: number;
+  buyAmount: number;
+
 }
 
 export interface BadgeProps {
@@ -83,12 +85,18 @@ export interface TokenActionsProps {
 
 export interface TokenTableProps {
   tokens: Token[];
+  buyAmount: number;
 }
 
 export interface TokenState {
   tokensA: Record<string, Token>;
   tokensB: Record<string, Token>;
   tokensC: Record<string, Token>;
+  buyAmount: {
+    A: number;
+    B: number;
+    C: number;
+  };
 }
 
 export interface CopyToastOptions {

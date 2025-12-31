@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Token, TOKEN_STAGES, TokenStage, TokenState } from "../types/interface";
+import { TokensKey } from "../types/types";
 
 /* --------------------------
  Types
@@ -51,6 +52,7 @@ const createMockToken = (): Token => ({
   insiders: Math.floor(Math.random() * 20),
   bundle: Math.floor(Math.random() * 5),
   seconds: Math.floor(Math.random() * 5),
+  buyAmount: 20,
 });
 
 /* --------------------------
@@ -122,32 +124,42 @@ const initialState: TokenState = {
   tokensA: createRandomTokens(2),
   tokensB: createRandomTokens(2),
   tokensC: createRandomTokens(2),
+  buyAmount: {
+    A: 0,
+    B: 0,
+    C: 0,
+  },
 };
 
-/* --------------------------
- Slice
----------------------------*/
+
 export const tokenSlice = createSlice({
   name: "tokens",
   initialState,
   reducers: {
-    // Update one random token in a set
     updateRandomToken: (
       state,
       action: PayloadAction<{ set: "A" | "B" | "C" }>
     ) => {
-      const setKey = `tokens${action.payload.set}` as keyof TokenState;
+      const setKey: TokensKey = `tokens${action.payload.set}`;
+
       const tokens = Object.values(state[setKey]);
       if (!tokens.length) return;
 
       const token = tokens[Math.floor(Math.random() * tokens.length)];
       randomizeTokenStats(token);
     },
+    setBuyAmount: (
+      state,
+      action: PayloadAction<{ set: "A" | "B" | "C"; value: number }>
+    ) => {
+      state.buyAmount[action.payload.set] = action.payload.value;
+    },
   },
 });
+
 
 /* --------------------------
  Exports
 ---------------------------*/
-export const { updateRandomToken } = tokenSlice.actions;
+export const { updateRandomToken, setBuyAmount } = tokenSlice.actions;
 export default tokenSlice.reducer;
