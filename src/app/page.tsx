@@ -17,6 +17,7 @@ import {
 import { PType, SortKey, SortOrder } from "./types/types";
 import { sortTokens } from "./utils/helper";
 import { setBuyAmount } from "./store/tokenSlice";
+import AxiomPulseHeader from "./components/organisms/header";
 
 
 export default function Page() {
@@ -57,136 +58,139 @@ export default function Page() {
   const [modalColumn, setModalColumn] = useState<string | null>(null);
   const buyAmount = useSelector((state: RootState) => state.tokens.buyAmount);
 
-
+  console.log(tokensA, 'tokensA')
   /* ---------------- RENDER ---------------- */
 
   return (
-    <div className="max-w-full mx-auto px-4 py-8">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {columns.map((col) => {
-          const sortedTokens = useMemo(
-            () =>
-              sortTokens(
-                col.tokens,
-                sortByColumn[col.title].key,
-                sortByColumn[col.title].order
-              ),
-            [col.tokens, sortByColumn, col.title]
-          );
+    <>
+      <AxiomPulseHeader />
+      <div className="max-w-full mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {columns.map((col) => {
+            const sortedTokens = useMemo(
+              () =>
+                sortTokens(
+                  col.tokens,
+                  sortByColumn[col.title].key,
+                  sortByColumn[col.title].order
+                ),
+              [col.tokens, sortByColumn, col.title]
+            );
 
-          return (
-            <div
-              key={col.title}
-              className="w-full rounded-lg border border-gray-800 bg-[#101114]"
-            >
-              {/* -------- HEADER -------- */}
-              <div className="flex items-center justify-between px-4 py-1 border-b border-gray-800">
-                <h2 className="text-lg font-semibold text-white">
-                  {col.title}
-                </h2>
+            return (
+              <div
+                key={col.title}
+                className="w-full rounded-lg border border-gray-800 bg-[#101114]"
+              >
+                {/* -------- HEADER -------- */}
+                <div className="flex items-center justify-between px-4 py-1 border-b border-gray-800">
+                  <h2 className="text-lg font-semibold text-white">
+                    {col.title}
+                  </h2>
 
-                <div className="relative">
-                  <div className="flex items-center gap-4 rounded-full border border-gray-700 py-0.5 px-4 text-xs text-gray-400">
-                    <div className="flex items-center gap-1 cursor-pointer">
-                      <FaBolt />
-                      <input
-                        type="text"
-                        inputMode="numeric"
-                        pattern="[0-9]*"
-                        value={buyAmount[col.set]}
-                        onChange={(e) => {
-                          const value = Number(e.target.value.replace(/[^0-9]/g, ""));
-                          dispatch(setBuyAmount({ set: col.set, value }));
-                        }}
-                        className="max-w-[30px] w-fullborder-none outline-none ring-0focus:outline-nonefocus:ring-0 focus:border-none bg-transparenttext-center"
-                      />
-                    </div>
+                  <div className="relative">
+                    <div className="flex items-center gap-4 rounded-full border border-gray-700 py-0.5 px-4 text-xs text-gray-400">
+                      <div className="flex items-center gap-1 cursor-pointer">
+                        <FaBolt />
+                        <input
+                          type="text"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          value={buyAmount[col.set]}
+                          onChange={(e) => {
+                            const value = Number(e.target.value.replace(/[^0-9]/g, ""));
+                            dispatch(setBuyAmount({ set: col.set, value }));
+                          }}
+                          className="max-w-[30px] w-fullborder-none outline-none ring-0focus:outline-nonefocus:ring-0 focus:border-none bg-transparenttext-center"
+                        />
+                      </div>
 
-                    {/* ---- P1 P2 P3 (GROUPED) ---- */}
-                    <div className="relative group flex items-center gap-2">
-                      {(["P1", "P2", "P3"] as const).map((p) => (
-                        <span
-                          key={p}
-                          onMouseEnter={() => {
-                            setSelectedByColumn((prev) => ({
-                              ...prev,
-                              [col.title]: p,
-                            }));
+                      {/* ---- P1 P2 P3 (GROUPED) ---- */}
+                      <div className="relative group flex items-center gap-2">
+                        {(["P1", "P2", "P3"] as const).map((p) => (
+                          <span
+                            key={p}
+                            onMouseEnter={() => {
+                              setSelectedByColumn((prev) => ({
+                                ...prev,
+                                [col.title]: p,
+                              }));
 
+                              setSortByColumn((prev) => ({
+                                ...prev,
+                                [col.title]: {
+                                  key:
+                                    p === "P1"
+                                      ? "time"
+                                      : p === "P2"
+                                        ? "volume"
+                                        : "price",
+                                  order: "desc",
+                                },
+                              }));
+                            }}
+                            onClick={() => setModalColumn(col.title)}
+                            className={`cursor-pointer font-semibold transition-colors ${selectedByColumn[col.title] === p ? "text-blue-500" : "text-white"} hover:text-blue-400`} >
+                            {p}
+                          </span>
+                        ))}
+
+                        {/* ---- DROPDOWN ---- */}
+                        <div
+                          className="absolute right-0 top-full mt-2 w-24 rounded-md border border-gray-700 bg-[#0e0f11] text-xs shadow-lg z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150"
+                        >
+                          {dropList.map((d, index) => (
+                            <div
+                              key={d.label}
+                              className={`flex items-center gap-2 px-2 py-1.5 cursor-pointer hover:bg-gray-800 ${index === 1
+                                ? "text-yellow-400 font-semibold"
+                                : "text-gray-400"
+                                }`}
+                            >
+                              {d.icon}
+                              <span>{d.label}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Sort Toggle */}
+                      <div className="cursor-pointer">
+                        <button
+                          onClick={() =>
                             setSortByColumn((prev) => ({
                               ...prev,
                               [col.title]: {
-                                key:
-                                  p === "P1"
-                                    ? "time"
-                                    : p === "P2"
-                                      ? "volume"
-                                      : "price",
-                                order: "desc",
+                                ...prev[col.title],
+                                order: prev[col.title].order === "asc" ? "desc" : "asc",
                               },
-                            }));
-                          }}
-                          onClick={() => setModalColumn(col.title)}
-                          className={`cursor-pointer font-semibold transition-colors ${selectedByColumn[col.title] === p ? "text-blue-500" : "text-white"} hover:text-blue-400`} >
-                          {p}
-                        </span>
-                      ))}
-
-                      {/* ---- DROPDOWN ---- */}
-                      <div
-                        className="absolute right-0 top-full mt-2 w-24 rounded-md border border-gray-700 bg-[#0e0f11] text-xs shadow-lg z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150"
-                      >
-                        {dropList.map((d, index) => (
-                          <div
-                            key={d.label}
-                            className={`flex items-center gap-2 px-2 py-1.5 cursor-pointer hover:bg-gray-800 ${index === 1
-                              ? "text-yellow-400 font-semibold"
-                              : "text-gray-400"
-                              }`}
-                          >
-                            {d.icon}
-                            <span>{d.label}</span>
-                          </div>
-                        ))}
+                            }))
+                          }
+                          className="text-gray-400 hover:text-white cursor-pointer"
+                        >
+                          {sortByColumn[col.title].order === "asc" ? "↑" : "↓"}
+                        </button>
                       </div>
-                    </div>
-
-                    {/* Sort Toggle */}
-                    <div className="cursor-pointer">
-                      <button
-                        onClick={() =>
-                          setSortByColumn((prev) => ({
-                            ...prev,
-                            [col.title]: {
-                              ...prev[col.title],
-                              order: prev[col.title].order === "asc" ? "desc" : "asc",
-                            },
-                          }))
-                        }
-                        className="text-gray-400 hover:text-white cursor-pointer"
-                      >
-                        {sortByColumn[col.title].order === "asc" ? "↑" : "↓"}
-                      </button>
                     </div>
                   </div>
                 </div>
+
+                {/* -------- TABLE -------- */}
+                <TokenTable tokens={sortedTokens} buyAmount={buyAmount[col.set]} />
               </div>
+            );
+          })}
+        </div>
 
-              {/* -------- TABLE -------- */}
-              <TokenTable tokens={sortedTokens} buyAmount={buyAmount[col.set]} />
-            </div>
-          );
-        })}
+        {/* -------- MODAL -------- */}
+        {modalColumn && (
+          <CommonModal
+            isOpen={!!modalColumn}
+            title="Trade Settings"
+            onClose={() => setModalColumn(null)}
+          />
+        )}
       </div>
-
-      {/* -------- MODAL -------- */}
-      {modalColumn && (
-        <CommonModal
-          isOpen={!!modalColumn}
-          title="Trade Settings"
-          onClose={() => setModalColumn(null)}
-        />
-      )}
-    </div>
+    </>
   );
 }

@@ -1,38 +1,7 @@
 import { toast } from "react-toastify";
-import { CopyToastOptions, TOKEN_STAGES, TokenStage } from "../types/interface";
-import { showError, showSuccess } from "./toast";
+import { CopyToastOptions} from "../types/interface";
 import { FaRegClipboard, FaTimes } from "react-icons/fa";
-import { ReactNode } from "react";
 
-
-export const TOKEN_NAMES = [
-  "NovaPulse",
-  "LunaFlux",
-  "ApexCoin",
-  "QuantumX",
-  "AtlasPay",
-  "Zenith",
-  "OrbitChain",
-  "EchoToken",
-  "Nimbus",
-  "Solara",
-  "HelixPay",
-  "Vertex",
-  "CosmoX",
-  "Aurora",
-  "PulseNet",
-  "MetaCoin",
-  "Cryptex",
-  "Valora",
-  "Nexo",
-  "BlockZen",
-] as const;
-
-export const getRandomStage = (): TokenStage =>
-  TOKEN_STAGES[Math.floor(Math.random() * TOKEN_STAGES.length)];
-
-export const getRandomTokenName = () =>
-  TOKEN_NAMES[Math.floor(Math.random() * TOKEN_NAMES.length)];
 
 export const copyToClipboard = async (
   value: string,

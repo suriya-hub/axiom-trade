@@ -28,7 +28,7 @@ export interface Token {
   cap: number;
   seconds: number;
   buyAmount: number;
-
+  address: string;
 }
 
 export interface BadgeProps {

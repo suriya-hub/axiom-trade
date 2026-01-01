@@ -1,29 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Token, TOKEN_STAGES, TokenStage, TokenState } from "../types/interface";
 import { TokensKey } from "../types/types";
+import { getRandomImage, getRandomStage, getRandomTokenName } from "../utils/helper";
 
-/* --------------------------
- Types
----------------------------*/
 
-/* --------------------------
- Helpers
----------------------------*/
-const getRandomImage = () =>
-  `https://picsum.photos/50/50?random=${Math.floor(Math.random() * 1000)}`;
-
-const getRandomStage = (): TokenStage =>
-  TOKEN_STAGES[Math.floor(Math.random() * TOKEN_STAGES.length)];
-
-const PREDEFINED_TOKEN_NAMES = [
-  "NovaPulse", "LunaFlux", "ApexCoin", "QuantumX", "AtlasPay",
-  "Zenith", "OrbitChain", "EchoToken", "Nimbus", "Solara",
-  "HelixPay", "Vertex", "CosmoX", "Aurora", "PulseNet",
-  "MetaCoin", "Cryptex", "Valora", "Nexo", "BlockZen",
-] as const;
-
-const getRandomTokenName = () =>
-  PREDEFINED_TOKEN_NAMES[Math.floor(Math.random() * PREDEFINED_TOKEN_NAMES.length)];
 
 /* --------------------------
  Create mock token
@@ -53,6 +33,7 @@ const createMockToken = (): Token => ({
   bundle: Math.floor(Math.random() * 5),
   seconds: Math.floor(Math.random() * 5),
   buyAmount: 20,
+  address: crypto.randomUUID().replace(/-/g, ''),
 });
 
 /* --------------------------

@@ -8,6 +8,7 @@ import { formatK } from "@/app/utils/format";
 import { Tooltip } from "../atom/Tooltip";
 import UserCard from "../atom/UserCard";
 import { copyToClipboard } from "@/app/utils/tokenUtils";
+import { shortAddress } from "@/app/utils/helper";
 
 
 export const TokenRow = ({ token, buyAmount }: { token: Token, buyAmount: number }) => {
@@ -31,30 +32,46 @@ export const TokenRow = ({ token, buyAmount }: { token: Token, buyAmount: number
     <>
       <div className="hover:bg-gray-900 text-white transition border border-gray-800 flex items-center justify-between text-white p-3 rounded-lg w-full gap-4 text-sm">
         {/* Left: Image */}
-        <div className="flex items-center gap-3">
-          <div className="relative w-12 h-12 bg-gray-700 flex items-center justify-center rounded cursor-pointer group">
-            <Tooltip
-              content={
-                <div className="w-[260px] h-[260px] rounded-lg overflow-hidden bg-black">
-                  <img
-                    src={token.image}
-                    alt={token.name}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                </div>
-              }
-            >
-              <img
-                src={token.image}
-                alt={token.name}
-                className="w-12 h-12 rounded cursor-pointer object-cover"
-              />
-            </Tooltip>
-            <Tooltip content="Featured Token">
-              <FaStar className="w-4 h-4 border border-blue-800 absolute -bottom-1 -right-1 text-yellow-400 bg-gray-900 rounded-full p-1 text-sm cursor-pointer" />
-            </Tooltip>
+        <div className="inline-flex flex-col items-center max-w-[56px]">
+          <div className="flex items-center gap-3 border-[2px] border-blue-800 rounded cursor-pointer group">
+            <div className="relative w-14 h-14 bg-gray-700 flex items-center justify-center">
+              <Tooltip
+                content={
+                  <div className="w-[260px] h-[260px] rounded-lg overflow-hidden bg-black">
+                    <img
+                      src={token.image}
+                      alt={token.name}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                }
+              >
+                <img
+                  src={token.image}
+                  alt={token.name}
+                  className="w-14 h-14 rounded object-cover cursor-pointer"
+                />
+              </Tooltip>
+
+              <Tooltip content="Featured Token">
+                <FaStar className="absolute -bottom-1 -right-1 w-4 h-4 border border-blue-800 text-yellow-400 bg-gray-900 rounded-full p-1 text-sm cursor-pointer" />
+              </Tooltip>
+            </div>
           </div>
+
+          {/* Address */}
+          <Tooltip content={`Copy ${token.address}pump`}>
+            <div className="mt-1 w-full text-xs text-center truncate cursor-pointer text-gray-400 hover:text-blue-400"
+              onClick={() => {
+                copyToClipboard(token.lname, {
+                  message: "Address copied to clipboard",
+                  icon: <FaRegClipboard className="text-blue-500 text-sm" />,
+                })
+              }}>
+              {shortAddress(token.address)}
+            </div>
+          </Tooltip>
         </div>
 
 
@@ -74,7 +91,7 @@ export const TokenRow = ({ token, buyAmount }: { token: Token, buyAmount: number
             <div
               onClick={() =>
                 copyToClipboard(token.lname, {
-                  message: "Token address copied",
+                  message: "Address copied to clipboard",
                   icon: <FaRegClipboard className="text-blue-500 text-sm" />,
                 })
               }
@@ -89,9 +106,7 @@ export const TokenRow = ({ token, buyAmount }: { token: Token, buyAmount: number
               <span className="text-green-400 font-mono font-bold">{token.seconds}s</span>
             </div>
             <div className="flex flex-row gap-1 cursor-pointer">
-
               <Tooltip content={
-
                 <UserCard
                   token={token}
                   username="OraxLabs"
@@ -101,7 +116,6 @@ export const TokenRow = ({ token, buyAmount }: { token: Token, buyAmount: number
                   followers={15}
                   onClose={() => alert("Close button clicked")}
                 />
-
               }>
                 <span className="text-gray-400 truncate hover:text-blue-400">
                   <FaUser />

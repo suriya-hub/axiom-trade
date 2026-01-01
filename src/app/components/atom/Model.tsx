@@ -3,6 +3,7 @@
 import { CommonModalProps } from "@/app/types/interface";
 import { useState } from "react";
 import { FaTimes, FaUserShield, FaShieldAlt, FaShieldVirus, FaInfoCircle } from "react-icons/fa";
+import { Tooltip } from "./Tooltip";
 
 
 
@@ -130,9 +131,11 @@ export const CommonModal = ({
 
                 {/* MEV Mode */}
                 <div className="flex items-center justify-between gap-2 mb-4 text-sm text-blue-400">
-                    <div className="flex flex-row items-center gap-2">
+                    <div className="flex flex-row items-center gap-2 cursor-pointer">
                         <span className="text-gray-400">MEV Mode</span>
-                        <FaInfoCircle />
+                        <Tooltip content={'KOLs'}>
+                            <FaInfoCircle />
+                        </Tooltip>
                     </div>
                     <div className="flex gap-2 border border-gray-700 px-2 py-1 rounded">
                         {mevModes.map((d) => (
