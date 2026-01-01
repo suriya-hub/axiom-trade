@@ -1,7 +1,7 @@
 "use client";
 
 import { useDispatch, useSelector } from "react-redux";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { RootState } from "./store";
 import { useWebSocketMock } from "./hooks/useWebSocketMock";
 import { TokenTable } from "./components/organisms/TokenTable";
@@ -18,6 +18,7 @@ import { PType, SortKey, SortOrder } from "./types/types";
 import { sortTokens } from "./utils/helper";
 import { setBuyAmount } from "./store/tokenSlice";
 import AxiomPulseHeader from "./components/organisms/header";
+import { TokenRowSkeleton } from "./components/atom/Skeleton";
 
 
 export default function Page() {
@@ -57,8 +58,15 @@ export default function Page() {
     });
   const [modalColumn, setModalColumn] = useState<string | null>(null);
   const buyAmount = useSelector((state: RootState) => state.tokens.buyAmount);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
-  console.log(tokensA, 'tokensA')
   /* ---------------- RENDER ---------------- */
 
   return (
@@ -67,14 +75,10 @@ export default function Page() {
       <div className="max-w-full mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {columns.map((col) => {
-            const sortedTokens = useMemo(
-              () =>
-                sortTokens(
-                  col.tokens,
-                  sortByColumn[col.title].key,
-                  sortByColumn[col.title].order
-                ),
-              [col.tokens, sortByColumn, col.title]
+            const sortedTokens = sortTokens(
+              col.tokens,
+              sortByColumn[col.title].key,
+              sortByColumn[col.title].order
             );
 
             return (
@@ -176,7 +180,18 @@ export default function Page() {
                 </div>
 
                 {/* -------- TABLE -------- */}
-                <TokenTable tokens={sortedTokens} buyAmount={buyAmount[col.set]} />
+                {isLoading ? (
+                  <div className="flex flex-col gap-3 p-4">
+                    {Array.from({ length: 6 }).map((_, i) => (
+                      <TokenRowSkeleton key={i} />
+                    ))}
+                  </div>
+                ) : (
+                  <TokenTable
+                    tokens={sortedTokens}
+                    buyAmount={buyAmount[col.set]}
+                  />
+                )}
               </div>
             );
           })}
