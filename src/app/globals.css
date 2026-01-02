@@ -81,3 +81,36 @@ body {
 .Toastify__close-button:hover {
   color: #ffffff !important;
 }
+
+/* styles/globals.css */
+
+.scrollbar-dark {
+  scrollbar-width: thin;
+  /* Firefox */
+  scrollbar-color: #5b6075 #101114;
+  /* thumb color | track color */
+}
+
+/* Chrome, Edge, Safari */
+.scrollbar-dark::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-dark::-webkit-scrollbar-track {
+  background: #101114;
+  /* track color */
+  border-radius: 3px;
+}
+
+.scrollbar-dark::-webkit-scrollbar-thumb {
+  background-color: #5b6075;
+  /* thumb color */
+  border-radius: 3px;
+  border: 1px solid #101114;
+  /* optional: padding effect */
+}
+
+.scrollbar-dark::-webkit-scrollbar-thumb:hover {
+  background-color: #7a80a0;
+  /* thumb hover effect */
+}

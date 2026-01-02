@@ -34,18 +34,37 @@ export const getRandomStage = (): TokenStage =>
   TOKEN_STAGES[Math.floor(Math.random() * TOKEN_STAGES.length)];
 
 const PREDEFINED_TOKEN_NAMES = [
-  "NovaPulse", "LunaFlux", "ApexCoin", "QuantumX", "AtlasPay",
-  "Zenith", "OrbitChain", "EchoToken", "Nimbus", "Solara",
-  "HelixPay", "Vertex", "CosmoX", "Aurora", "PulseNet",
-  "MetaCoin", "Cryptex", "Valora", "Nexo", "BlockZen",
+  "Jade", "Nova", "Luna", "Apex", "Quantum",
+  "Atlas", "Zenith", "Orbit", "Echo", "Nimbus",
+  "Solara", "Helix", "Vertex", "Cosmo", "Aurora",
+  "Pulse", "Meta", "Cryptex", "Valora", "Nexo",
+  "Stellar", "Neo", "Vortex", "Hyper", "Galaxy",
+  "Fusion", "Luma", "Astro", "Solarix", "Drift",
+  "Ignis", "Prism", "Rift", "Astra", "Bolt",
+  "Glow", "Terra", "Xeno", "Omni", "Fission"
+] as const;
+const ADDITIONAL_TOKEN_NAMES = [
+  "Nebula", "Orion", "Lyra", "Eclipse", "Spectra",
+  "Aether", "Vega", "Celes", "Novae", "Solstice",
+  "Polaris", "Arion", "Zenara", "Ignite", "Quasar",
+  "Lumina", "Stratus", "Aurion", "Draco", "Vertexa",
+  "Cryon", "Vortix", "Axion", "Hyperion", "Celestia",
+  "Radiant", "Obsidian", "Ionix", "Galara", "Nimbusa"
 ] as const;
 
-export const getRandomTokenName = () =>
-  PREDEFINED_TOKEN_NAMES[Math.floor(Math.random() * PREDEFINED_TOKEN_NAMES.length)];
+
+export const getRandomTokenName = (): string => {
+  const firstName =
+    PREDEFINED_TOKEN_NAMES[Math.floor(Math.random() * PREDEFINED_TOKEN_NAMES.length)];
+  const lastName =
+    ADDITIONAL_TOKEN_NAMES[Math.floor(Math.random() * ADDITIONAL_TOKEN_NAMES.length)];
+  return `${firstName } ${lastName}`;
+};
+
 
 export function formatK(num: number) {
-    if (num >= 1000) {
-        return (num / 1000).toFixed(1) + "K";
-    }
-    return num.toString();
+  if (num >= 1000) {
+    return (num / 1000).toFixed(1) + "K";
+  }
+  return num.toString();
 }

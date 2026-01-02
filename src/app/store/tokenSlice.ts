@@ -9,7 +9,7 @@ import { getRandomImage, getRandomStage, getRandomTokenName } from "../utils/hel
 const createMockToken = (): Token => ({
   id: crypto.randomUUID(),
   name: getRandomTokenName(),
-  lname: `${getRandomTokenName()} Protocol`,
+  lname: `${getRandomTokenName()}`,
   symbol: `TKN${Math.floor(Math.random() * 100)}`,
   price: Math.random() * 1000,
   volume: Math.random() * 10000,
@@ -100,9 +100,9 @@ const randomizeTokenStats = (token: Token) => {
 interface CombinedState extends TokenState, SearchModalState {}
 
 const initialState: CombinedState = {
-  tokensA: createRandomTokens(2),
-  tokensB: createRandomTokens(2),
-  tokensC: createRandomTokens(2),
+  tokensA: createRandomTokens(10),
+  tokensB: createRandomTokens(10),
+  tokensC: createRandomTokens(10),
   buyAmount: { A: 0, B: 0, C: 0 },
   isOpen: false, // search modal
 };

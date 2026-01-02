@@ -169,18 +169,17 @@ export default function Page() {
                 </div>
 
                 {/* -------- TABLE -------- */}
-                {isLoading ? (
-                  <div className="flex flex-col gap-3 p-4">
-                    {Array.from({ length: 6 }).map((_, i) => (
-                      <TokenRowSkeleton key={i} />
-                    ))}
-                  </div>
-                ) : (
-                  <TokenTable
-                    tokens={sortedTokens}
-                    buyAmount={buyAmount[col.set]}
-                  />
-                )}
+                <div className="flex-1 overflow-y-auto max-h-[calc(100vh-12rem)] p-4 scrollbar-dark">
+                  {isLoading ? (
+                    <div className="flex flex-col gap-3">
+                      {Array.from({ length: 6 }).map((_, i) => (
+                        <TokenRowSkeleton key={i} />
+                      ))}
+                    </div>
+                  ) : (
+                    <TokenTable tokens={sortedTokens} buyAmount={buyAmount[col.set]} />
+                  )}
+                </div>
               </div>
             );
           })}
