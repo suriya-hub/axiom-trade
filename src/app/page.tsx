@@ -19,6 +19,7 @@ import { sortTokens } from "./utils/helper";
 import { closeSearchModal, setBuyAmount } from "./store/tokenSlice";
 import AxiomPulseHeader from "./components/organisms/header";
 import { TokenRowSkeleton } from "./components/atom/Skeleton";
+import { Tooltip } from "./components/atom/Tooltip";
 
 
 export default function Page() {
@@ -148,22 +149,24 @@ export default function Page() {
                       </div>
 
                       {/* Sort Toggle */}
-                      <div className="cursor-pointer">
-                        <button
-                          onClick={() =>
-                            setSortByColumn((prev) => ({
-                              ...prev,
-                              [col.title]: {
-                                ...prev[col.title],
-                                order: prev[col.title].order === "asc" ? "desc" : "asc",
-                              },
-                            }))
-                          }
-                          className="text-gray-400 hover:text-white cursor-pointer"
-                        >
-                          {sortByColumn[col.title].order === "asc" ? "↑" : "↓"}
-                        </button>
-                      </div>
+                      <Tooltip content="Sorting">
+                        <div className="cursor-pointer">
+                          <button
+                            onClick={() =>
+                              setSortByColumn((prev) => ({
+                                ...prev,
+                                [col.title]: {
+                                  ...prev[col.title],
+                                  order: prev[col.title].order === "asc" ? "desc" : "asc",
+                                },
+                              }))
+                            }
+                            className="text-gray-400 hover:text-white cursor-pointer"
+                          >
+                            {sortByColumn[col.title].order === "asc" ? "↑" : "↓"}
+                          </button>
+                        </div>
+                      </Tooltip>
                     </div>
                   </div>
                 </div>
